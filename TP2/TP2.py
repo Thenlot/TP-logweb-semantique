@@ -66,11 +66,9 @@ def parse_nt(texte):
         for element in elements[:3]:
             element = element.strip("<>")
 
-            # Extraction du nom local après # ou /
             element = element.rsplit("#", 1)[-1]
             element = element.rsplit("/", 1)[-1]
 
-            # Suppression des préfixes RDF
             if ":" in element:
                 element = element.split(":")[-1]
 
@@ -79,6 +77,10 @@ def parse_nt(texte):
         onto.append(triplet)
 
     return onto
+
+
+def unparse_dot(onto):
+    
 
 
 def interpret(cmd):
