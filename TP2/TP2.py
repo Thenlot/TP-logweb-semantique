@@ -1,4 +1,4 @@
-
+import subprocess
 from functools import reduce
 
 dic = {}
@@ -80,7 +80,13 @@ def parse_nt(texte):
 
 
 def unparse_dot(onto):
-    
+    dot_lines = ["digraph {"]
+
+    for s, p, o in onto:
+        dot_lines.append(f'    "{s}" -> "{o}" [label="{p}"];')
+
+    dot_lines.append("}")
+    return "\n".join(dot_lines)
 
 
 def interpret(cmd):
@@ -105,7 +111,7 @@ def interpret(cmd):
         return nom
 
 
-    elif mots[0] == "parse" and len(mots) >= 3 and mots[1] == "nt":
+    elif mots[0] == "parse" and mots[1] == "nt":
 
         source = mots[2]
 
@@ -127,6 +133,33 @@ def interpret(cmd):
         print(dic[nom])
         return dic[nom]
 
+    elif mots[0] == "unparse" and mots[1] == "dot":
+        
+        source = mots[2]
+
+        dot = unparse_dot(dic[source])
+
+        nom = var()
+        dic[nom] = dot
+
+        print(f"Unparse DOT dans {nom}")
+        return nom
+
+    elif mots[0] == "sauvegarde":
+        
+        source = mots[1]
+        fichier = mots[2]
+
+        with open(fichier, "w", encoding="utf-8") as fh:
+            fh.write(dic[source])
+
+        print(f"Sauvegardé dans {fichier}")
+        return fichier
+
+    elif mots[0]=="compile":
+        source = mots[1]
+        subprocess.run(["dot", "-o", "tp2.png" , "-Tpng", source])
+
     else:
         return "Je ne sais pas"
 
@@ -134,7 +167,9 @@ def interpret(cmd):
 
 interpret("declare V1")
 interpret("charge tp1.nt")
-
 interpret("parse nt V2")
-
 interpret("affiche V3")
+interpret("unparse dot V3")
+interpret("affiche V4")
+interpret("sauvegarde V4 tp2.dot")
+interpret("compile tp2.dot")

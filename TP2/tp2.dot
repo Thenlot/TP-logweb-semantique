@@ -1,0 +1,12 @@
+digraph {
+    "bob" -> "jouer" [label="aime"];
+    "amy" -> "joueur" [label="aime"];
+    "Personne" -> "Class" [label="type"];
+    "Joueur" -> "Class" [label="type"];
+    "Amoureux" -> "Class" [label="type"];
+    "joueur" -> "Joueur" [label="type"];
+    "bob" -> "Personne" [label="type"];
+    "amy" -> "Personne" [label="type"];
+    "bob" -> "Joueur" [label="type"];
+    "Joueur" -> "Personne" [label="subClassOf"];
+}
